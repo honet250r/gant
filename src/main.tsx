@@ -1,4 +1,5 @@
 import * as React from 'react'
+// Force update for Vercel logging check
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
