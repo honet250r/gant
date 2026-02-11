@@ -67,7 +67,7 @@ export const useTaskStore = create<TaskState>()(
                 };
 
                 // Supabase to keep in sync
-                await supabase.from('tasks').upsert({
+                const { error } = await supabase.from('tasks').upsert({
                     id: newTask.id,
                     project_id: newTask.projectId,
                     name: newTask.name,
@@ -81,13 +81,16 @@ export const useTaskStore = create<TaskState>()(
                     updated_at: newTask.updatedAt.toISOString(),
                 });
 
+                if (error) console.error('Supabase addTask Error:', error);
+
                 set((state) => {
                     const updatedTasks = [...state.tasks, newTask];
                     return { tasks: updateParentDates(updatedTasks, newTask.parentId) };
                 });
             },
             deleteTask: async (id) => {
-                await supabase.from('tasks').delete().eq('id', id);
+                const { error } = await supabase.from('tasks').delete().eq('id', id);
+                if (error) console.error('Supabase deleteTask Error:', error);
 
                 set((state) => {
                     const taskToDelete = state.tasks.find(t => t.id === id);
@@ -105,7 +108,8 @@ export const useTaskStore = create<TaskState>()(
                 if (data.startDate) updateData.start_date = data.startDate.toISOString();
                 if (data.endDate) updateData.end_date = data.endDate.toISOString();
 
-                await supabase.from('tasks').update(updateData).eq('id', id);
+                const { error } = await supabase.from('tasks').update(updateData).eq('id', id);
+                if (error) console.error('Supabase updateTask Error:', error);
 
                 set((state) => {
                     const oldTask = state.tasks.find(t => t.id === id);
