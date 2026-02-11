@@ -5,6 +5,7 @@ import { useProjectStore } from './stores/projectStore';
 import { useTaskStore } from './stores/taskStore';
 import { ArrowLeft, Database, Download, Upload, AlertTriangle, Edit2 } from 'lucide-react';
 import { Modal, Button } from './components/common';
+import { SupabaseSync } from './components/SupabaseSync';
 
 function App() {
     const [selectedProjectId, setSelectedProjectId] = React.useState<string | null>(null);
@@ -169,6 +170,7 @@ function App() {
 
             {/* Main Content */}
             <div className="flex-1 flex overflow-hidden">
+                <SupabaseSync projectId={selectedProjectId} />
                 <GanttChart
                     projectId={selectedProjectId}
                     projectStartDate={selectedProject.startDate}
